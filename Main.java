@@ -12,6 +12,10 @@ import strategy.CreditCardStrategy;
 import strategy.CryptoStrategy;
 import strategy.PayPalStrategy;
 import strategy.PaymentContext;
+import abstractfactory.Application;
+import abstractfactory.GUIFactory;
+import abstractfactory.MacFactory;
+import abstractfactory.WindowsFactory;
 
 /**
  * ==========================================
@@ -31,7 +35,7 @@ import strategy.PaymentContext;
  * Derleme: javac **\/*.java
  * Çalıştır: java Main
  */
-public class Main {
+public class main {
     public static void main(String[] args) {
 
         System.out.println("=== 1. SINGLETON PATTERN ===");
@@ -41,7 +45,8 @@ public class Main {
         System.out.println("Aynı nesne mi? " + (s1 == s2));
 
         System.out.println("\n=== 2. FACTORY METHOD PATTERN ===");
-        // factory/ShapeDialog.java, CircleDialog.java, RectangleDialog.java tamamlandıktan sonra:
+        // factory/ShapeDialog.java, CircleDialog.java, RectangleDialog.java
+        // tamamlandıktan sonra:
         ShapeDialog circleDialog = new CircleDialog();
         ShapeDialog rectDialog = new RectangleDialog();
         circleDialog.renderShape();
@@ -83,5 +88,15 @@ public class Main {
 
         ctx.setStrategy(new CryptoStrategy());
         ctx.pay(100);
+
+        System.out.println("\n=== 7. ABSTRACT FACTORY PATTERN ===");
+        // abstractfactory/ dosyaları tamamlandıktan sonra:
+        GUIFactory winFactory = new WindowsFactory();
+        Application winApp = new Application(winFactory);
+        winApp.render();
+
+        GUIFactory macFactory = new MacFactory();
+        Application macApp = new Application(macFactory);
+        macApp.render();
     }
 }

@@ -7,7 +7,7 @@ Bu repo, klasik **Gang of Four (GoF)** tasarım desenlerinin Java ile sade ve ö
 - Tasarım desenlerini **teoriyle değil, elle yazarak** içselleştirmek.
 - Her desenin **ne problemi çözdüğünü**, **ne zaman kullanılacağını** ve **ne zaman kullanılmaması gerektiğini** netleştirmek.
 - Desenlerin **Spring gibi gerçek dünyada yaygın kullanılan bir framework'te** nasıl görüldüğünü göstererek teoriyi pratiğe bağlamak.
-- Benzer desenler (örn. *Factory Method* vs *Simple Factory* vs *Strategy*) arasındaki farkları somut örneklerle ayırt etmek.
+- Benzer desenler (örn. _Factory Method_ vs _Simple Factory_ vs _Strategy_) arasındaki farkları somut örneklerle ayırt etmek.
 
 Her klasör bir patern içerir. Kodlar, ben doldurarak öğrenmek için `TODO` yorumlarıyla bırakılmış olup şu an tamamlanmış hâldedir.
 
@@ -21,10 +21,12 @@ designPatterns/
 ├── observer/     → Observer Pattern
 ├── proxy/        → Proxy Pattern
 ├── strategy/     → Strategy Pattern (+ Simple Factory kullanımı)
+├── abstractfactory/ → Abstract Factory Pattern
 └── main.java     → Tüm desenlerin çalıştırıldığı örnek
 ```
 
 **Çalıştırma:**
+
 ```bash
 javac **/*.java
 java Main
@@ -112,7 +114,7 @@ java Main
 
 **Amaç:** Bir algoritma ailesini tanımlar, her birini ayrı sınıfa koyar ve bunları **runtime'da değiştirilebilir** yapar. Davranışı nesneye çevirir.
 
-**Factory Method'dan farkı:** Factory Method *hangi nesnenin üretileceğini* seçer; Strategy *hangi davranışın kullanılacağını* seçer. İki desen birlikte de kullanılabilir — bu repoda `PaymentStrategyFactory` string girdiyi uygun Strategy'ye çevirir.
+**Factory Method'dan farkı:** Factory Method _hangi nesnenin üretileceğini_ seçer; Strategy _hangi davranışın kullanılacağını_ seçer. İki desen birlikte de kullanılabilir — bu repoda `PaymentStrategyFactory` string girdiyi uygun Strategy'ye çevirir.
 
 ### Spring'de Karşılığı
 
@@ -124,6 +126,23 @@ java Main
 
 ---
 
+## 7. Abstract Factory
+
+**Amaç:** Birbirleriyle ilişkili bir **ürün ailesini** birlikte üretmek. Client kodu hangi aileyle çalıştığını bilmez; sadece "bir factory" alır ve o factory'nin ürettiği tüm parçaları kullanır.
+
+**Factory Method'dan farkı:** Factory Method tek bir ürünün üretimini alt sınıfa devreder. Abstract Factory birden fazla ilişkili ürünü (Button + Checkbox) **aynı aileden** üretmeyi garanti eder — Windows button yanında yanlışlıkla Mac checkbox gelmez.
+
+**Ne zaman kullanılır?** Tema/skin sistemleri, farklı işletim sistemleri için UI toolkit'leri, farklı DB vendor'ları için SQL dialect üretimi gibi "uyumlu parça ailesi" gerektiren durumlar.
+
+### Spring'de Karşılığı
+
+- **`BeanFactory`** — Adı üstünde; Spring'in çekirdek factory mekanizması birçok bean türünü birlikte üretir ve yönetir. Tam klasik Abstract Factory değil ama ruhen benzer.
+- **`AbstractApplicationContext` hiyerarşisi** — `ClassPathXmlApplicationContext`, `AnnotationConfigApplicationContext`, `GenericWebApplicationContext` gibi context aileleri. Her biri kendi bean üretim stratejilerini beraberinde getirir.
+- **Spring Boot autoconfiguration** — Bir teknoloji seçilince (örn. JPA + Hibernate), ona ait tüm konfigürasyon bean'leri (EntityManagerFactory, TransactionManager, DataSource) **uyumlu bir aile olarak** birlikte üretilir.
+- **`DataSource` konfigürasyonu** — `HikariDataSource`, `TomcatJdbcDataSource` vb. her biri connection pool, JDBC driver, transaction desteği gibi ilişkili ürünleri birlikte sağlar.
+
+---
+
 ## Öğrendiklerimden Notlar
 
 - **Her problem patern gerektirmez.** Küçük, basit işler için `new` ile nesne yaratmak en doğru çözüm olabilir.
@@ -131,12 +150,3 @@ java Main
 - **Factory Method** ile **Strategy** birbirini tamamlar: biri nesneyi seçer, diğeri davranışı soyutlar.
 - Spring, bu desenlerin çoğunu **konvansiyon + anotasyonlarla gizler**; framework kullanırken farkında olmasan da bu desenler zaten çalışır.
 - Desenleri elle yazmak, framework sihrinin altında ne olduğunu anlamayı kolaylaştırır.
-
----
-
-## Kaynaklar
-
-- *Design Patterns: Elements of Reusable Object-Oriented Software* — Gang of Four (1994)
-- *Head First Design Patterns* — Freeman & Robson
-- [Refactoring.Guru — Design Patterns](https://refactoring.guru/design-patterns)
-- [Spring Framework Reference](https://docs.spring.io/spring-framework/reference/)
